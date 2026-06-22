@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusNet | Explore</title>
+    <title>SocialConnect | Explore</title>
     <link rel="stylesheet" href="index.css">
 </head>
 
@@ -13,9 +13,9 @@
 
     <div class="container" style="grid-template-columns: 1fr; max-width: 800px;">
         <div class="card">
-            <h1 style="margin-bottom: 1.5rem;">Explore Keywords</h1>
+            <h1 style="margin-bottom: 1.5rem;">Explore Hashtags</h1>
             <div class="input-group">
-                <input type="text" id="hashtag-search" placeholder="Search keywords (e.g., #coding)..."
+                <input type="text" id="hashtag-search" placeholder="Search for hashtags (e.g., #coding)..."
                     onkeyup="filterHashtags()">
             </div>
         </div>
@@ -32,7 +32,7 @@
             const resultsEl = document.getElementById('explore-results');
 
             if (!query) {
-                resultsEl.innerHTML = '<div class="card" style="text-align: center; color: var(--text-secondary);">Type a keyword to find publications.</div>';
+                resultsEl.innerHTML = '<div class="card" style="text-align: center; color: var(--text-secondary);">Type a hashtag to see relevant posts.</div>';
                 return;
             }
 
@@ -41,7 +41,7 @@
             );
 
             if (filtered.length === 0) {
-                resultsEl.innerHTML = '<div class="card" style="text-align: center; color: var(--text-secondary);">No publications found matching that keyword.</div>';
+                resultsEl.innerHTML = '<div class="card" style="text-align: center; color: var(--text-secondary);">No posts found with that hashtag.</div>';
             } else {
                 resultsEl.innerHTML = filtered.map(renderPost).join('');
             }

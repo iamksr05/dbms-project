@@ -1,13 +1,13 @@
 const users = [
-    { id: 1, handle: 'dev_dave', summary: 'Software developer building the future.', registered_at: '2023-01-10', followers: 3, following: 3 },
-    { id: 2, handle: 'fitness_fiona', summary: 'Personal trainer & nutrition advisor.', registered_at: '2023-01-15', followers: 5, following: 3 },
-    { id: 3, handle: 'travel_trevor', summary: 'Exploring the world, one city at a time.', registered_at: '2023-02-01', followers: 5, following: 3 }
+    { id: 1, username: 'dev_dave', bio: 'Software developer building the future.', join_date: '2023-01-10', followers: 3, following: 3 },
+    { id: 2, username: 'fitness_fiona', bio: 'Personal trainer & nutrition advisor.', join_date: '2023-01-15', followers: 5, following: 3 },
+    { id: 3, username: 'travel_trevor', bio: 'Exploring the world, one city at a time.', join_date: '2023-02-01', followers: 5, following: 3 }
 ];
 
 const posts = [
     {
         id: 1,
-        author_id: 1,
+        user_id: 1,
         author: 'dev_dave',
         content: 'Excited to start building our new product today!',
         likes: 6,
@@ -19,7 +19,7 @@ const posts = [
     },
     {
         id: 2,
-        author_id: 2,
+        user_id: 2,
         author: 'fitness_fiona',
         content: 'Morning run complete! Feeling energized.',
         likes: 8,
@@ -31,7 +31,7 @@ const posts = [
     },
     {
         id: 18,
-        author_id: 18,
+        user_id: 18,
         author: 'code_cody',
         content: 'Studying for my database exam. SQL joins are interesting!',
         likes: 5,
@@ -74,11 +74,11 @@ let groups = [
 
 function renderNavbar() {
     const navbar = `
-        <div class="logo">NexusNet</div>
+        <div class="logo">SocialConnect</div>
         <div class="nav-links">
             <a href="index.html">Feed</a>
             <a href="explore.html">Explore</a>
-            <a href="groups.html">Spaces</a>
+            <a href="groups.html">Groups</a>
             <a href="profile.html">Profile</a>
         </div>
     `;
@@ -98,8 +98,8 @@ function renderPost(post) {
                 <div style="color: var(--accent); margin-top: 0.5rem; font-weight: 500;">${post.hashtags ? post.hashtags.join(' ') : ''}</div>
             </div>
             <div class="post-footer">
-                <div class="action-btn" onclick="likePost(${post.id})">👍 <span id="likes-${post.id}">${post.likes}</span> Upvotes</div>
-                <div class="action-btn" onclick="toggleComments(${post.id})">💬 ${post.comments.length} Responses</div>
+                <div class="action-btn" onclick="likePost(${post.id})">❤️ <span id="likes-${post.id}">${post.likes}</span> Likes</div>
+                <div class="action-btn" onclick="toggleComments(${post.id})">💬 ${post.comments.length} Comments</div>
             </div>
             <div id="comments-${post.id}" style="display: none; margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 1rem;">
                 <div id="comment-list-${post.id}">
@@ -110,8 +110,8 @@ function renderPost(post) {
                     `).join('')}
                 </div>
                 <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                    <input type="text" id="new-comment-${post.id}" placeholder="Write a response..." style="padding: 0.5rem;">
-                    <button class="btn" onclick="addComment(${post.id})">Send</button>
+                    <input type="text" id="new-comment-${post.id}" placeholder="Write a comment..." style="padding: 0.5rem;">
+                    <button class="btn" onclick="addComment(${post.id})">Post</button>
                 </div>
             </div>
         </div>
@@ -145,7 +145,7 @@ function addComment(postId) {
 
             input.value = '';
             const footerBtns = document.querySelectorAll(`#post-${postId} .action-btn`);
-            if (footerBtns[1]) footerBtns[1].innerHTML = `💬 ${post.comments.length} Responses`;
+            if (footerBtns[1]) footerBtns[1].innerHTML = `💬 ${post.comments.length} Comments`;
         }
     }
 }
@@ -159,7 +159,7 @@ function createPost() {
     if (content) {
         const newPost = {
             id: posts.length + 100,
-            author_id: 1,
+            user_id: 1,
             author: 'dev_dave',
             content: content,
             likes: 0,
@@ -201,14 +201,14 @@ function renderGroups() {
                         <div>
                             <h2 style="color: var(--accent); margin-bottom: 0.5rem; font-weight: 700;">${g.name}</h2>
                             <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.95rem;">${g.description}</p>
-                            <p style="font-size: 0.9rem; font-weight: 500; color: var(--text-secondary);">👥 ${g.members.length} enrolled</p>
+                            <p style="font-size: 0.9rem; font-weight: 500; color: var(--text-secondary);">👥 ${g.members.length} members</p>
                         </div>
                         <button class="btn" style="background: ${isMember ? '#ef4444' : 'var(--accent)'}; box-shadow: ${isMember ? '0 4px 12px rgba(239, 68, 68, 0.15)' : 'var(--shadow)'};" onclick="toggleJoinGroup(${g.id})">
-                            ${isMember ? 'Leave Space' : 'Join Space'}
+                            ${isMember ? 'Leave Group' : 'Join Group'}
                         </button>
                     </div>
                     <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem; font-size: 0.95rem; color: var(--text-secondary);">
-                        <strong style="color: var(--text-primary);">Enrolled:</strong> ${g.members.map(m => '@' + m).join(', ')}
+                        <strong style="color: var(--text-primary);">Members:</strong> ${g.members.map(m => '@' + m).join(', ')}
                     </div>
                 </div>
             `;
@@ -256,11 +256,11 @@ function renderFeed() {
     if (feedEl) {
         const createPostForm = `
             <div class="card">
-                <h2 class="sidebar-title">Create Publication</h2>
-                <textarea id="post-content" placeholder="Share what's on your mind..." style="margin-bottom: 1rem;"></textarea>
+                <h2 class="sidebar-title">Create Post</h2>
+                <textarea id="post-content" placeholder="What's on your mind?" style="margin-bottom: 1rem;"></textarea>
                 <div style="display: flex; gap: 1rem;">
-                    <input type="text" id="post-tags" placeholder="Keywords (comma separated)" style="flex-grow: 1;">
-                    <button class="btn" onclick="createPost()">Share</button>
+                    <input type="text" id="post-tags" placeholder="Hashtags (comma separated)" style="flex-grow: 1;">
+                    <button class="btn" onclick="createPost()">Post</button>
                 </div>
             </div>
         `;
@@ -269,12 +269,12 @@ function renderFeed() {
 
     if (trendingEl) {
         trendingEl.innerHTML = `
-            <h2 class="sidebar-title">Trending Keywords</h2>
+            <h2 class="sidebar-title">Trending Hashtags</h2>
             <ul class="tag-list">
                 ${hashtags.map(h => `
                     <li class="tag-item">
                         <span class="tag-name" style="color: var(--accent); font-weight: 600;">${h.tag}</span>
-                        <span class="tag-count">${h.count} publications</span>
+                        <span class="tag-count">${h.count} posts</span>
                     </li>
                 `).join('')}
             </ul>
@@ -287,7 +287,7 @@ function renderProfile() {
     if (profileFeedEl) {
         const davePosts = posts.filter(p => p.author === 'dev_dave');
         if (davePosts.length === 0) {
-            profileFeedEl.innerHTML = '<div class="card" style="text-align: center; color: var(--text-secondary);">You haven\'t published anything yet.</div>';
+            profileFeedEl.innerHTML = '<div class="card" style="text-align: center; color: var(--text-secondary);">You haven\'t posted anything yet.</div>';
         } else {
             profileFeedEl.innerHTML = davePosts.map(renderPost).join('');
         }

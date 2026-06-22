@@ -1,6 +1,6 @@
-# NexusNet: Relational Database System Capstone Project Report
+# SocialConnect: Relational Database System Capstone Project Report
 
-NexusNet is a relational database-driven social network featuring member registration, publication shares, responses, upvotes, direct messaging, keyword indexing, and spaces enrollment.
+SocialConnect is a relational database-driven social network featuring user registration, posts, comments, likes, direct messaging, hashtag indexing, and group participation.
 
 The system is implemented on **MySQL** as the backend database, paired with a web frontend client.
 
@@ -13,164 +13,164 @@ The database schema maps all entity relationships cleanly while preserving integ
 ### Relational Schema (Textual Form)
 Primary Keys are denoted by **PK**, Foreign Keys by **FK**, and composite keys are bracketed.
 
-*   **Member** (<u>member_id</u>, handle, email, pass_hash, summary, birth_date, registered_at, account_status)
-*   **Member_Contact** (<u>member_id (FK)</u>, <u>contact_no</u>)
-*   **Publication** (<u>pub_id</u>, author_id (FK), body_text, attachment_url, published_at, view_scope)
-*   **Response** (<u>response_id</u>, pub_id (FK), responder_id (FK), response_text, responded_at)
-*   **Chat_Message** (<u>msg_id</u>, sender_member_id (FK), receiver_member_id (FK), msg_content, sent_at)
-*   **Space** (<u>space_id</u>, space_title, space_desc, space_created_at)
-*   **Keyword** (<u>keyword_id</u>, keyword_name)
-*   **Subscription** (<u>[subscriber_id (FK), publisher_id (FK)]</u>, subscribed_at)
-*   **Upvote** (<u>[voter_id (FK), pub_id (FK)]</u>, upvoted_at)
-*   **Publication_Keyword** (<u>[pub_id (FK), keyword_id (FK)]</u>)
-*   **Space_Enrollment** (<u>[member_id (FK), space_id (FK)]</u>, enrolled_at)
+*   **User** (<u>user_id</u>, username, email, password, bio, d_o_b, join_date, account_status)
+*   **User_Phone** (<u>user_id (FK)</u>, <u>phone_no</u>)
+*   **Post** (<u>post_id</u>, user_id (FK), content, media_url, created_at, visibility)
+*   **Comment** (<u>comment_id</u>, post_id (FK), user_id (FK), comment_text, created_at)
+*   **Message** (<u>message_id</u>, sender_id (FK), receiver_id (FK), message_text, sent_time)
+*   **User_Group** (<u>group_id</u>, group_name, description, created_on)
+*   **HashTag** (<u>hashtag_id</u>, tag_name)
+*   **Follows** (<u>[user_id (FK), followee_id (FK)]</u>, follow_date)
+*   **Likes** (<u>[user_id (FK), post_id (FK)]</u>, liked_at)
+*   **Post_HashTag** (<u>[post_id (FK), hashtag_id (FK)]</u>)
+*   **Group_Member** (<u>[user_id (FK), group_id (FK)]</u>, join_date)
 
 ### E-R Diagram to Schema Mapping
-*   **Member Contacts:** The multivalued attribute `contact_no` on the `Member` entity is mapped to a dedicated table `Member_Contact` to comply with First Normal Form (1NF).
-*   **Subscriptions:** The recursive M:N subscription relationship (followers/following) is resolved via the `Subscription` junction table.
-*   **Upvotes / Keywords / Enrollments:** All M:N relationships are resolved via junction tables (`Upvote`, `Publication_Keyword`, `Space_Enrollment`).
+*   **User Contacts:** The multivalued attribute `phone_no` on the `User` entity is mapped to a dedicated table `User_Phone` to comply with First Normal Form (1NF).
+*   **Followers:** The recursive M:N subscription relationship (followers/following) is resolved via the `Follows` junction table.
+*   **Likes / HashTags / Group Members:** All M:N relationships are resolved via junction tables (`Likes`, `Post_HashTag`, `Group_Member`).
 
 ---
 
 ## 2. Data Dictionary
 
-### Table: Member
-Stores primary registration accounts.
+### Table: User
+Stores primary user accounts.
 
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
-| `member_id` | `INT` | PK, AUTO_INCREMENT | Unique identifier for each member |
-| `handle` | `VARCHAR(50)` | UNIQUE, NOT NULL | Unique username handle |
+| `user_id` | `INT` | PK, AUTO_INCREMENT | Unique identifier for each user |
+| `username` | `VARCHAR(50)` | UNIQUE, NOT NULL | Unique username handle |
 | `email` | `VARCHAR(100)` | UNIQUE, NOT NULL | Account email address |
-| `pass_hash` | `VARCHAR(255)` | NOT NULL | Hashed password |
-| `summary` | `TEXT` | NULL | Bio statement |
-| `birth_date` | `DATE` | NOT NULL | Birth date |
-| `registered_at` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Account creation date |
+| `password` | `VARCHAR(255)` | NOT NULL | Hashed password |
+| `bio` | `TEXT` | NULL | Bio statement |
+| `d_o_b` | `DATE` | NOT NULL | Birth date |
+| `join_date` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Account creation date |
 | `account_status` | `ENUM` | DEFAULT 'active' | Account state: 'active', 'suspended', 'deactivated' |
 
-### Table: Member_Contact
+### Table: User_Phone
 Handles phone numbers (multivalued attribute).
 
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
-| `member_id` | `INT` | PK, FK (Member.member_id) ON DELETE CASCADE | Associated member |
-| `contact_no` | `VARCHAR(15)` | PK, NOT NULL | Phone contact value |
+| `user_id` | `INT` | PK, FK (User.user_id) ON DELETE CASCADE | Associated user |
+| `phone_no` | `VARCHAR(15)` | PK, NOT NULL | Phone contact value |
 
-### Table: Publication
+### Table: Post
 Stores updates/posts.
 
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
-| `pub_id` | `INT` | PK, AUTO_INCREMENT | Unique publication identifier |
-| `author_id` | `INT` | FK (Member.member_id) ON DELETE CASCADE | Author reference |
-| `body_text` | `TEXT` | NOT NULL | Body content |
-| `attachment_url` | `VARCHAR(255)` | NULL | Optional media file path |
-| `published_at` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Published time |
-| `view_scope` | `ENUM` | DEFAULT 'public' | Visibility scope: 'public', 'private', 'connections' |
+| `post_id` | `INT` | PK, AUTO_INCREMENT | Unique post identifier |
+| `user_id` | `INT` | FK (User.user_id) ON DELETE CASCADE | Author reference |
+| `content` | `TEXT` | NOT NULL | Post text content |
+| `media_url` | `VARCHAR(255)` | NULL | Optional media file path |
+| `created_at` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Published time |
+| `visibility` | `ENUM` | DEFAULT 'public' | Visibility settings: 'public', 'private', 'friends' |
 
-### Table: Response
-Stores comments on publications.
+### Table: Comment
+Stores comments on posts.
 
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
-| `response_id` | `INT` | PK, AUTO_INCREMENT | Unique response identifier |
-| `pub_id` | `INT` | FK (Publication.pub_id) ON DELETE CASCADE | Publication commented on |
-| `responder_id` | `INT` | FK (Member.member_id) ON DELETE CASCADE | Commenter member |
-| `response_text` | `TEXT` | NOT NULL | Comments content |
-| `responded_at` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Responded time |
+| `comment_id` | `INT` | PK, AUTO_INCREMENT | Unique comment identifier |
+| `post_id` | `INT` | FK (Post.post_id) ON DELETE CASCADE | Post commented on |
+| `user_id` | `INT` | FK (User.user_id) ON DELETE CASCADE | Commenter user |
+| `comment_text` | `TEXT` | NOT NULL | Comments content |
+| `created_at` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Commented time |
 
-### Table: Chat_Message
+### Table: Message
 Stores direct conversations.
 
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
-| `msg_id` | `INT` | PK, AUTO_INCREMENT | Unique message identifier |
-| `sender_member_id` | `INT` | FK (Member.member_id) ON DELETE CASCADE | Sender |
-| `receiver_member_id`| `INT` | FK (Member.member_id) ON DELETE CASCADE | Receiver |
-| `msg_content` | `TEXT` | NOT NULL | Message body |
-| `sent_at` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Sent timestamp |
+| `message_id` | `INT` | PK, AUTO_INCREMENT | Unique message identifier |
+| `sender_id` | `INT` | FK (User.user_id) ON DELETE CASCADE | Sender |
+| `receiver_id` | `INT` | FK (User.user_id) ON DELETE CASCADE | Receiver |
+| `message_text` | `TEXT` | NOT NULL | Message body |
+| `sent_time` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Sent timestamp |
 
-### Table: Space
+### Table: User_Group
 Stores user communities.
 
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
-| `space_id` | `INT` | PK, AUTO_INCREMENT | Unique space identifier |
-| `space_title` | `VARCHAR(100)` | NOT NULL | Title of the space |
-| `space_desc` | `VARCHAR(600)` | NULL | Group description |
-| `space_created_at` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Space creation time |
+| `group_id` | `INT` | PK, AUTO_INCREMENT | Unique group identifier |
+| `group_name` | `VARCHAR(100)` | NOT NULL | Title of the group |
+| `description` | `VARCHAR(600)` | NULL | Group description |
+| `created_on` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Group creation time |
 
-### Table: Keyword
-Stores hashtags/keywords.
+### Table: HashTag
+Stores hashtags.
 
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
-| `keyword_id` | `INT` | PK, AUTO_INCREMENT | Unique keyword identifier |
-| `keyword_name` | `VARCHAR(50)` | UNIQUE, NOT NULL | Keyword label |
+| `hashtag_id` | `INT` | PK, AUTO_INCREMENT | Unique hashtag identifier |
+| `tag_name` | `VARCHAR(50)` | UNIQUE, NOT NULL | Hashtag label |
 
-### Table: Subscription (Junction)
+### Table: Follows (Junction)
 Maps the recursive connections relationship.
 
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
-| `subscriber_id` | `INT` | PK, FK (Member.member_id) ON DELETE CASCADE | Following user |
-| `publisher_id` | `INT` | PK, FK (Member.member_id) ON DELETE CASCADE | Followed user |
-| `subscribed_at` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Follow date |
+| `user_id` | `INT` | PK, FK (User.user_id) ON DELETE CASCADE | Following user |
+| `followee_id` | `INT` | PK, FK (User.user_id) ON DELETE CASCADE | Followed user |
+| `follow_date` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Follow date |
 
-### Table: Upvote (Junction)
+### Table: Likes (Junction)
 Maps the appreciation relationship.
 
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
-| `voter_id` | `INT` | PK, FK (Member.member_id) ON DELETE CASCADE | Upvoting user |
-| `pub_id` | `INT` | PK, FK (Publication.pub_id) ON DELETE CASCADE | Upvoted post |
-| `upvoted_at` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Upvote timestamp |
+| `user_id` | `INT` | PK, FK (User.user_id) ON DELETE CASCADE | Liking user |
+| `post_id` | `INT` | PK, FK (Post.post_id) ON DELETE CASCADE | Liked post |
+| `liked_at` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Like timestamp |
 
-### Table: Publication_Keyword (Junction)
-Maps keywords associated with publications.
-
-| Column Name | Data Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| `pub_id` | `INT` | PK, FK (Publication.pub_id) ON DELETE CASCADE | Publication |
-| `keyword_id` | `INT` | PK, FK (Keyword.keyword_id) ON DELETE CASCADE | Keyword |
-
-### Table: Space_Enrollment (Junction)
-Maps user community enrollments.
+### Table: Post_HashTag (Junction)
+Maps hashtags associated with posts.
 
 | Column Name | Data Type | Constraints | Description |
 | :--- | :--- | :--- | :--- |
-| `member_id` | `INT` | PK, FK (Member.member_id) ON DELETE CASCADE | Enrolled user |
-| `space_id` | `INT` | PK, FK (Space.space_id) ON DELETE CASCADE | Enrolled group |
-| `enrolled_at` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Join date |
+| `post_id` | `INT` | PK, FK (Post.post_id) ON DELETE CASCADE | Post |
+| `hashtag_id` | `INT` | PK, FK (HashTag.hashtag_id) ON DELETE CASCADE | Hashtag |
+
+### Table: Group_Member (Junction)
+Maps user community memberships.
+
+| Column Name | Data Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `user_id` | `INT` | PK, FK (User.user_id) ON DELETE CASCADE | Member user |
+| `group_id` | `INT` | PK, FK (User_Group.group_id) ON DELETE CASCADE | Enrolled group |
+| `join_date` | `DATETIME` | DEFAULT CURRENT_TIMESTAMP | Join date |
 
 ---
 
 ## 3. Cardinality & Participation Constraints
 
-1.  **Creates (Member [1] ─── Creates ─── [N] Publication):**
-    *   *Cardinality:* A member can share zero or many publications. A publication belongs to exactly one member.
-    *   *Participation:* Member: Partial. Publication: Total.
-2.  **Writes (Member [1] ─── Writes ─── [N] Response):**
-    *   *Cardinality:* A member can write zero or many responses. A response belongs to exactly one member.
-    *   *Participation:* Member: Partial. Response: Total.
-3.  **on (Publication [1] ─── on ─── [N] Response):**
-    *   *Cardinality:* A publication can have zero or many responses. A response must belong to one publication.
-    *   *Participation:* Publication: Partial. Response: Total.
-4.  **Upvote (Member [M] ─── Upvote ─── [N] Publication):**
-    *   *Cardinality:* A member can upvote many publications. A publication can be upvoted by many members.
-    *   *Participation:* Member: Partial. Publication: Partial.
-5.  **Contains (Keyword [M] ─── Contains ─── [N] Publication):**
-    *   *Cardinality:* A keyword can index many publications. A publication can contain many keywords.
-    *   *Participation:* Keyword: Partial. Publication: Partial.
-6.  **Subscription (Member [M] ─── Subscribes ─── [N] Member) [Recursive]:**
-    *   *Cardinality:* A member can subscribe to many publishers. A publisher can be subscribed to by many members.
-    *   *Participation:* Member: Partial.
-7.  **Direct Messaging (Member [1] ─── Sends/Receives ─── [N] Chat_Message):**
-    *   *Cardinality:* A member can send/receive many messages. A message has exactly one sender and one receiver.
-    *   *Participation:* Member: Partial. Chat_Message: Total.
-8.  **Space Enrollment (Member [N] ─── Enrollment ─── [M] Space):**
-    *   *Cardinality:* A member can enroll in many spaces. A space can contain many members.
-    *   *Participation:* Member: Partial. Space: Partial.
+1.  **Creates (User [1] ─── Creates ─── [N] Post):**
+    *   *Cardinality:* A user can create zero or many posts. A post belongs to exactly one user.
+    *   *Participation:* User: Partial. Post: Total.
+2.  **Writes (User [1] ─── Writes ─── [N] Comment):**
+    *   *Cardinality:* A user can write zero or many comments. A comment belongs to exactly one user.
+    *   *Participation:* User: Partial. Comment: Total.
+3.  **on (Post [1] ─── on ─── [N] Comment):**
+    *   *Cardinality:* A post can have zero or many comments. A comment must belong to one post.
+    *   *Participation:* Post: Partial. Comment: Total.
+4.  **Likes (User [M] ─── Likes ─── [N] Post):**
+    *   *Cardinality:* A user can like many posts. A post can be liked by many users.
+    *   *Participation:* User: Partial. Post: Partial.
+5.  **Contains (HashTag [M] ─── Contains ─── [N] Post):**
+    *   *Cardinality:* A hashtag can index many posts. A post can contain many hashtags.
+    *   *Participation:* HashTag: Partial. Post: Partial.
+6.  **Follows (User [M] ─── Follows ─── [N] User) [Recursive]:**
+    *   *Cardinality:* A user can follow many users. A user can be followed by many users.
+    *   *Participation:* User: Partial.
+7.  **Direct Messaging (User [1] ─── Sends/Receives ─── [N] Message):**
+    *   *Cardinality:* A user can send/receive many messages. A message has exactly one sender and one receiver.
+    *   *Participation:* User: Partial. Message: Total.
+8.  **Group Membership (User [N] ─── Joins ─── [M] User_Group):**
+    *   *Cardinality:* A user can join many groups. A group can contain many users.
+    *   *Participation:* User: Partial. User_Group: Partial.
 
 ---
 
@@ -178,11 +178,11 @@ Maps user community enrollments.
 
 ### First Normal Form (1NF)
 *   **Rule:** Atomic columns, primary keys defined.
-*   **Proof:** Every table has a primary key. Multivalued attributes like `contact_no` are extracted into `Member_Contact` so that every attribute contains atomic values.
+*   **Proof:** Every table has a primary key. Multivalued attributes like `phone_no` are extracted into `User_Phone` so that every attribute contains atomic values.
 
 ### Second Normal Form (2NF)
 *   **Rule:** In 1NF, no partial dependency (non-key columns must depend on the full primary key).
-*   **Proof:** Tables with single-column keys are automatically in 2NF. Composite tables (`Subscription`, `Upvote`, `Publication_Keyword`, `Space_Enrollment`, `Member_Contact`) only contain attributes (`subscribed_at`, `upvoted_at`, `enrolled_at`) that functionally depend on the combined keys.
+*   **Proof:** Tables with single-column keys are automatically in 2NF. Composite tables (`Follows`, `Likes`, `Post_HashTag`, `Group_Member`, `User_Phone`) only contain attributes (`follow_date`, `liked_at`, `join_date`) that functionally depend on the combined keys.
 
 ### Third Normal Form (3NF)
 *   **Rule:** In 2NF, no transitive dependencies.
