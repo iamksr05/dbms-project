@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusNet | Spaces</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <nav class="navbar" id="navbar"></nav>
+
+    <div class="container" style="grid-template-columns: 1fr;">
+        <div class="card">
+            <h2 class="sidebar-title">Create New Space</h2>
+            <div class="input-group" style="margin-bottom: 1rem;">
+                <input type="text" id="group-name" placeholder="Space Name">
+            </div>
+            <div class="input-group" style="margin-bottom: 1rem;">
+                <textarea id="group-desc" placeholder="Space Description (Optional)"></textarea>
+            </div>
+            <button class="btn" onclick="createGroup()">Create Space</button>
+        </div>
+
+        <h1 style="margin-bottom: 2rem;">User Spaces</h1>
+
+        <div id="groups-list">
+            
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

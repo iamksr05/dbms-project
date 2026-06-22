@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusNet | Explore</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <nav class="navbar" id="navbar"></nav>
+
+    <div class="container" style="grid-template-columns: 1fr; max-width: 800px;">
+        <div class="card">
+            <h1 style="margin-bottom: 1.5rem;">Explore Keywords</h1>
+            <div class="input-group">
+                <input type="text" id="hashtag-search" placeholder="Search keywords (e.g., #coding)..."
+                    onkeyup="filterHashtags()">
+            </div>
+        </div>
+
+        <div id="explore-results">
+            <!-- Filtered posts will appear here -->
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        function filterHashtags() {
+            const query = document.getElementById('hashtag-search').value.toLowerCase();
+            const resultsEl = document.getElementById('explore-results');
+
+            if (!query) {
+                resultsEl.innerHTML = '<div class="card" style="text-align: center; color: var(--text-secondary);">Type a keyword to find publications.</div>';
+                return;
+            }
+
+            const filtered = posts.filter(p =>
+                p.hashtags.some(h => h.toLowerCase().includes(query))
+            );
+
+            if (filtered.length === 0) {
+                resultsEl.innerHTML = '<div class="card" style="text-align: center; color: var(--text-secondary);">No publications found matching that keyword.</div>';
+            } else {
+                resultsEl.innerHTML = filtered.map(renderPost).join('');
+            }
+        }
+        window.onload = () => {
+            renderNavbar();
+            filterHashtags();
+        };
+    </script>
+</body>
+
+</html>
