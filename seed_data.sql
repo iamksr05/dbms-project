@@ -1,0 +1,176 @@
+USE social_connect_db;
+
+INSERT INTO User (username, email, password, bio, d_o_b, join_date) VALUES
+('dev_dave', 'dave@connect.com', '$2b$12$Y1b...', 'Software developer building the future.', '1995-05-15', '2023-01-10 10:00:00'),
+('fitness_fiona', 'fiona@connect.com', '$2b$12$Y1b...', 'Personal trainer & nutrition advisor.', '1990-12-01', '2023-01-15 11:30:00'),
+('travel_trevor', 'trevor@connect.com', '$2b$12$Y1b...', 'Exploring the world, one city at a time.', '2000-03-20', '2023-02-01 09:15:00'),
+('chef_clara', 'clara@connect.com', '$2b$12$Y1b...', 'Food blogger and pastry lover.', '1985-02-23', '2023-02-05 14:20:00'),
+('design_diana', 'diana@connect.com', '$2b$12$Y1b...', 'UI/UX designer crafting elegant products.', '1975-06-10', '2023-02-10 16:45:00'),
+('photo_phil', 'phil@connect.com', '$2b$12$Y1b...', 'Capturing moments in natural light.', '1992-08-12', '2023-02-15 08:00:00'),
+('music_max', 'max@connect.com', '$2b$12$Y1b...', 'Vinyl collector and amateur guitarist.', '1000-01-01', '2023-02-20 12:00:00'),
+('nature_nate', 'nate@connect.com', '$2b$12$Y1b...', 'Hiking guide and conservationist.', '1980-07-31', '2023-02-25 10:30:00'),
+('book_bella', 'bella@connect.com', '$2b$12$Y1b...', 'Always reading. Lit major.', '1994-11-20', '2023-03-01 09:00:00'),
+('science_sam', 'sam@connect.com', '$2b$12$Y1b...', 'Physics nerd studying quantum mechanics.', '1970-09-02', '2023-03-05 21:00:00'),
+('art_alice', 'alice@connect.com', '$2b$12$Y1b...', 'Abstract oil painter & art enthusiast.', '1996-04-18', '2023-03-10 07:30:00'),
+('gamer_gary', 'gary@connect.com', '$2b$12$Y1b...', 'Speedrunner and retro games reviewer.', '1977-05-25', '2023-03-15 13:45:00'),
+('pets_penny', 'penny@connect.com', '$2b$12$Y1b...', 'Dog mom of three golden retrievers.', '1998-02-14', '2023-03-20 15:20:00'),
+('film_fred', 'fred@connect.com', '$2b$12$Y1b...', 'Cinephile. Writing movie analysis.', '1980-03-11', '2023-03-25 00:00:00'),
+('history_hal', 'hal@connect.com', '$2b$12$Y1b...', 'High school history teacher.', '1965-10-15', '2023-03-30 11:11:00'),
+('garden_grace', 'grace@connect.com', '$2b$12$Y1b...', 'Urban gardener. Organic farming advocate.', '2001-08-10', '2023-04-01 10:10:00'),
+('yoga_yara', 'yara@connect.com', '$2b$12$Y1b...', 'Vinyasa flow guide & meditation teacher.', '1981-12-30', '2023-04-05 18:30:00'),
+('code_cody', 'cody@connect.com', '$2b$12$Y1b...', 'Computer engineering undergrad student.', '1999-01-01', '2023-04-10 12:12:00'),
+('finance_frank', 'frank@connect.com', '$2b$12$Y1b...', 'Portfolio manager sharing market insights.', '1963-09-13', '2023-04-15 06:00:00'),
+('writer_wendy', 'wendy@connect.com', '$2b$12$Y1b...', 'Creative writer drafting my first novel.', '1970-05-29', '2023-04-20 22:22:00');
+
+INSERT INTO User_Phone (user_id, phone_no) VALUES
+(1, '5552319087'),
+(1, '5552319088'),
+(2, '5559871234'),
+(3, '5556661122'),
+(4, '5553334411'),
+(5, '5558882233'),
+(6, '5554449900'),
+(7, '5557778811'),
+(8, '5551112200'),
+(9, '5552223388'),
+(10, '5553339977'),
+(11, '5554440055'),
+(12, '5555556622'),
+(13, '5559990088'),
+(14, '5558887711'),
+(15, '5551117766'),
+(16, '5552228833'),
+(17, '5553334455'),
+(18, '5554445566'),
+(18, '5554445567'),
+(19, '5555556677'),
+(20, '5556667788');
+
+INSERT INTO User_Group (group_name, description) VALUES
+('Tech & Innovation', 'A community for discussing software, hardware, and start-ups.'),
+('Active Lifestyles', 'Sharing recipes, workouts, hiking trails, and health goals.'),
+('Creative Minds', 'Everything about painting, writing, photography, and design.');
+
+INSERT INTO Group_Member (user_id, group_id) VALUES
+(1, 1), (5, 1), (10, 1), (12, 1), (18, 1),
+(2, 2), (3, 2), (8, 2), (13, 2), (17, 2),
+(5, 3), (6, 3), (11, 3), (20, 3);
+
+INSERT INTO Post (user_id, content, visibility, created_at) VALUES
+(1, 'Excited to start building our new product today! #coding #startup', 'public', '2023-05-01 10:00:00'),
+(2, 'Morning run complete! Feeling energized. #fitness #running', 'public', '2023-05-02 11:00:00'),
+(3, 'Just landed in Tokyo. The view is breath-taking! #travel #tokyo', 'public', '2023-05-03 09:00:00'),
+(4, 'Baked some sourdough today. Smells amazing. #cooking #baking', 'friends', '2023-05-04 14:00:00'),
+(5, 'Working on a new dashboard interface. Simplicity is key. #design #uidesign', 'public', '2023-05-05 16:00:00'),
+(6, 'Golden hour photography in the park. Perfect light. #photography', 'public', '2023-05-06 08:30:00'),
+(7, 'Listening to some classic jazz on vinyl tonight. #music #jazz', 'public', '2023-05-07 12:00:00'),
+(8, 'Found a new trail in the mountains. Quite a climb! #hiking #nature', 'friends', '2023-05-08 10:30:00'),
+(9, 'Finished reading my 10th book this year. highly recommend it. #reading #books', 'public', '2023-05-09 09:00:00'),
+(10, 'Quantum computing advances are fascinating. A new era. #science #tech', 'public', '2023-05-10 21:00:00'),
+(11, 'Just finished my new oil painting! #art #painting', 'public', '2023-05-11 07:30:00'),
+(12, 'Stream starts in 10 minutes. Playing retro platformers today. #gaming #twitch', 'public', '2023-05-12 13:45:00'),
+(13, 'Adopted a new golden retriever puppy today! Meet Max. #dogs #pets', 'public', '2023-05-13 15:20:00'),
+(14, 'Rewatching classic noir films this weekend. The cinematography is gold. #movies #cinema', 'public', '2023-05-14 00:00:00'),
+(15, 'On this day in 1789, the French Revolution began. #history #education', 'public', '2023-05-15 11:11:00'),
+(16, 'Harvested our first organic tomatoes today! #gardening #organic', 'public', '2023-05-16 10:10:00'),
+(17, 'Start your morning with 10 minutes of mindful breathing. #yoga #mindfulness', 'public', '2023-05-17 18:30:00'),
+(18, 'Studying for my database exam. SQL joins are interesting! #database #coding', 'public', '2023-05-18 12:12:00'),
+(19, 'Market trends show high tech resilience this quarter. #finance #stocks', 'public', '2023-05-19 06:00:00'),
+(20, 'Finished writing chapter 3 of my manuscript! #writing #novel', 'public', '2023-05-20 22:22:00'),
+(1, 'Debugging a memory leak in JS. JavaScript is wild. #coding #tech', 'public', '2023-05-21 02:00:00'),
+(2, 'Leg day complete. Always push your limits! #fitness', 'public', '2023-05-22 15:00:00'),
+(8, 'Getting ready for a weekend camping trip. #nature #camping', 'public', '2023-05-23 11:00:00'),
+(6, 'Macro photography is hard but rewarding. #photography', 'public', '2023-05-24 14:00:00'),
+(20, 'Drafting some short stories today. #writing', 'public', '2023-05-25 09:00:00'),
+(18, 'Learning relational algebra. DBMS is deep! #database #education', 'public', '2023-05-26 10:00:00'),
+(1, 'Coffee and code on a Sunday morning. #coding', 'public', '2023-05-27 08:00:00'),
+(2, 'Healthy eating makes all the difference. #fitness #cooking', 'public', '2023-05-28 17:00:00'),
+(6, 'New camera lens arrived. Time to test! #photography', 'public', '2023-05-29 23:00:00'),
+(20, 'Writing a blog post about creative habits. #writing #creative', 'public', '2023-05-30 08:00:00');
+
+INSERT INTO Comment (post_id, user_id, comment_text) VALUES
+(1, 2, 'Best of luck with the startup Dave!'),
+(2, 1, 'Inspirational, Fiona. I need to run too.'),
+(3, 1, 'Wow, Tokyo is gorgeous! Have fun!'),
+(5, 6, 'Beautiful layout design, Diana!'),
+(7, 8, 'Love that album Max! Great choice.'),
+(8, 7, 'Stay safe out there in the mountains.'),
+(10, 11, 'Fascinating thoughts, Sam!'),
+(12, 13, 'I will tune in to the stream!'),
+(16, 15, 'Those tomatoes look incredibly fresh!'),
+(20, 16, 'Can not wait to read the full novel, Wendy!'),
+(16, 20, 'Organic is the way to go.'),
+(18, 1, 'Keep practicing, Cody. It gets easier!'),
+(18, 2, 'Joins are indeed powerful.'),
+(1, 4, 'Excellent post!'),
+(2, 4, 'Work hard, play hard.'),
+(5, 4, 'Minimalist styles are the best.'),
+(14, 1, 'Cinema classic!'),
+(16, 8, 'Gardening is highly meditative.'),
+(20, 17, 'Great updates Wendy.'),
+(21, 2, 'Take some rest, Dave.'),
+(22, 1, 'Fiona, awesome progress!'),
+(23, 16, 'Enjoy the camping trip Nate!'),
+(25, 1, 'Love your writing style!'),
+(26, 2, 'DBMS logic is beautiful!'),
+(27, 2, 'Sunday morning vibes!'),
+(28, 1, 'True. Nutrition is 80% of it.'),
+(29, 20, 'Tell us how you like the new lens!'),
+(30, 16, 'Looking forward to the blog post!'),
+(30, 17, 'Writing is therapy.'),
+(30, 5, 'Completely agree on creative habits.');
+
+INSERT INTO HashTag (tag_name) VALUES
+('coding'), ('fitness'), ('travel'), ('cooking'), ('design'), ('photography'), ('music'), ('nature'), ('reading'), ('science');
+
+INSERT INTO Post_HashTag (post_id, hashtag_id) VALUES
+(1, 1), (21, 1), (27, 1),
+(2, 2), (22, 2), (28, 2),
+(3, 3),
+(4, 4), (28, 4),
+(5, 5),
+(6, 6), (24, 6), (29, 6),
+(7, 7),
+(8, 8), (23, 8),
+(9, 9),
+(10, 10);
+
+INSERT INTO Likes (user_id, post_id) VALUES
+(1, 2), (1, 6), (1, 18), (1, 20), (1, 30),
+(2, 1), (2, 6), (2, 18), (2, 20), (2, 30),
+(16, 1), (16, 2), (16, 18), (16, 20), (16, 25), (16, 30),
+(20, 1), (20, 2), (20, 6), (20, 18), (20, 24), (20, 30),
+(8, 7), (8, 12), (8, 20), (8, 30),
+(4, 1), (4, 2), (4, 5), (4, 10), (4, 14), (4, 16), (4, 18), (4, 19), (4, 20), (4, 30);
+
+INSERT INTO Follows (user_id, followee_id) VALUES
+(1, 2), (1, 16), (1, 20),
+(2, 1), (2, 18), (2, 20),
+(16, 1), (16, 20), (16, 15),
+(20, 1), (20, 16), (20, 17),
+(8, 7), (8, 12), (8, 16),
+(7, 8), (12, 8),
+(4, 1), (4, 2), (4, 3), (4, 5), (4, 6), (4, 7), (4, 8), (4, 9), (4, 10);
+
+INSERT INTO Message (sender_id, receiver_id, message_text) VALUES
+(1, 2, 'Hey Fiona, you up for a workout session?'),
+(2, 1, 'Sure Dave! Let us meet at 6.'),
+(1, 2, 'Awesome. I will see you there.'),
+(16, 20, 'Wendy, did you finish the editing?'),
+(20, 16, 'Almost Grace. Sending the draft soon.'),
+(16, 20, 'Sounds good.'),
+(8, 7, 'Max, are you going to the concert?'),
+(7, 8, 'Yes Nate, already bought my tickets.'),
+(4, 5, 'Diana, I need some help with the logo.'),
+(5, 4, 'Send it over Clara, glad to review.'),
+(1, 16, 'Really appreciate your organic gardening tips!'),
+(16, 1, 'No problem Dave, happy to help.'),
+(20, 1, 'Dave, check out this writing draft.'),
+(1, 20, 'Looks amazing Wendy. Very descriptive.'),
+(18, 2, 'Fiona, the database structures are complete.'),
+(2, 18, 'Superb Cody, let us write the queries now.'),
+(10, 11, 'Which paint brand is best?'),
+(11, 10, 'Golden Acrylics is really high quality.'),
+(10, 11, 'Thanks, Alice!'),
+(17, 20, 'Wendy, are you attending the creative group today?'),
+(20, 17, 'Yes Yara, 7 PM right?');
